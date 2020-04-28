@@ -82,17 +82,24 @@
         src: "{{playbook_dir}}/templates/audit_report.j2"
         dest: "{{save_dir}}/audit/fragments/{{inventory_hostname}}.md"
         lstrip_blocks: yes
- 
+
 - name: assemble all reports 
   hosts: localhost
   gather_facts: false
   
   tasks: 
 
+    - name: generate report file structure from a template
+      template: 
+        src: "{{playbook_dir}}/templates/audit_report_structure.j2"
+        dest: "{{save_dir}}/audit/fragments/_audit_report_structure.md"
+        lstrip_blocks: yes
+
     - name: Assembling all reports 
       assemble:  
         src: "{{save_dir}}/audit/fragments"
         dest: "{{save_dir}}/audit/report.md"
+        delimiter: '***************************************************'
   
     - name: include timestamp at beginning of report file
       lineinfile:
