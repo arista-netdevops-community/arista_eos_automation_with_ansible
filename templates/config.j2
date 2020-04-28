@@ -1,0 +1,16 @@
+hostname {{ inventory_hostname }}
+ip domain-name {{ domain_name }} 
+{% for item in topology %} 
+interface {{ item.interface }}
+    no shutdown
+    description "{{ item.lldp_neighbor}} **** {{ item.lldp_neighbor_interface }}"
+    no switchport
+    ip address {{ item. ip }}/{{ item.subnet }}
+{% endfor %}
+interface Loopback0
+    ip address {{ loopback }}/32
+router bgp {{ as }}
+    redistribute connected
+{% for item in topology %} 
+    neighbor {{ item.ebgp_peer_ip }} remote-as {{ hostvars[item.lldp_neighbor]['as'] }}
+{% endfor %}

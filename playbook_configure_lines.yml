@@ -1,0 +1,16 @@
+- name: configure lines on EOS devices
+  hosts: switch1
+  connection: httpapi
+  gather_facts: false
+  
+  tasks:
+
+    - name: configure lines on EOS devices
+      eos_config:
+        parents: interface Ethernet8
+        lines: 
+          - description "testing ansible module eos_config"
+          - switchport mode access
+          - no shutdown
+        diff_against: session
+

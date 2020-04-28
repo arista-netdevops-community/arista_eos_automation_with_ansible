@@ -1,0 +1,267 @@
+! Command: show running-config
+! device: switch2 (DCS-7150S-64-CL, EOS-4.22.4M-2GB)
+!
+! boot system flash:/EOS.swi
+!
+daemon TerminAttr
+   exec /usr/bin/TerminAttr -ingestgrpcurl=10.83.29.224:9910 -taillogs -ingestauth=key,IngestKey -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent
+   no shutdown
+!
+load-interval default 5
+!
+transceiver qsfp default-mode 4x10G
+!
+queue-monitor length
+!
+logging host 10.83.28.52
+!
+hostname switch2
+ip name-server vrf default 10.83.28.52
+ip name-server vrf default 10.83.29.222
+ip domain-name lab.local
+!
+ntp server 10.83.28.52
+!
+snmp-server community public ro
+!
+spanning-tree mode mstp
+!
+aaa authorization exec default local
+!
+no aaa root
+aaa authentication policy local allow-nopassword-remote-login
+!
+username admin privilege 15 role network-admin nopassword
+username ansible privilege 15 secret sha512 $6$kF4LcqnNXScyWdD.$d4/BTBXRDDYvvGXzgtHWXD41yP25Q/KhVeCueMkOVCv/bEv8rL74BRIvGpo0EHZBoWamWXeR.n3Mq2k2vorOw1
+username telemetry secret 5 $1$aVYVFaqH$W8oKA8utuEKVf8wcB1SLz.
+!
+vlan 10
+   name red
+!
+vlan 20
+   name blue
+!
+vlan 30
+   name yellow
+!
+interface Ethernet1
+   shutdown
+!
+interface Ethernet2
+   no switchport
+   ip address 10.10.10.1/31
+!
+interface Ethernet3
+   shutdown
+!
+interface Ethernet4
+   shutdown
+!
+interface Ethernet5
+   shutdown
+!
+interface Ethernet6
+   shutdown
+!
+interface Ethernet7
+   shutdown
+!
+interface Ethernet8
+   shutdown
+   switchport access vlan 20
+!
+interface Ethernet9
+   shutdown
+   switchport access vlan 20
+!
+interface Ethernet10
+   shutdown
+   switchport trunk native vlan 10
+   switchport trunk allowed vlan 20,30,40
+!
+interface Ethernet11
+   shutdown
+!
+interface Ethernet12
+   shutdown
+!
+interface Ethernet13
+   shutdown
+!
+interface Ethernet14
+   shutdown
+!
+interface Ethernet15
+   shutdown
+!
+interface Ethernet16
+   shutdown
+!
+interface Ethernet17
+   shutdown
+!
+interface Ethernet18
+   shutdown
+!
+interface Ethernet19
+   shutdown
+!
+interface Ethernet20
+   shutdown
+!
+interface Ethernet21
+   shutdown
+!
+interface Ethernet22
+   shutdown
+!
+interface Ethernet23
+   shutdown
+!
+interface Ethernet24
+   no switchport
+   ip address 10.10.10.4/31
+!
+interface Ethernet25
+   shutdown
+!
+interface Ethernet26
+   shutdown
+!
+interface Ethernet27
+   shutdown
+!
+interface Ethernet28
+   shutdown
+!
+interface Ethernet29
+   shutdown
+!
+interface Ethernet30
+   shutdown
+!
+interface Ethernet31
+   shutdown
+!
+interface Ethernet32
+   shutdown
+!
+interface Ethernet33
+   shutdown
+!
+interface Ethernet34
+   shutdown
+!
+interface Ethernet35
+   shutdown
+!
+interface Ethernet36
+   shutdown
+!
+interface Ethernet37
+   shutdown
+!
+interface Ethernet38
+   shutdown
+!
+interface Ethernet39
+   shutdown
+!
+interface Ethernet40
+   shutdown
+!
+interface Ethernet41
+   shutdown
+!
+interface Ethernet42
+   shutdown
+!
+interface Ethernet43
+   shutdown
+!
+interface Ethernet44
+   shutdown
+!
+interface Ethernet45
+   shutdown
+!
+interface Ethernet46
+   shutdown
+!
+interface Ethernet47
+   shutdown
+!
+interface Ethernet48
+   shutdown
+!
+interface Ethernet49/1
+   shutdown
+!
+interface Ethernet49/2
+   shutdown
+!
+interface Ethernet49/3
+   shutdown
+!
+interface Ethernet49/4
+   shutdown
+!
+interface Ethernet50/1
+   shutdown
+!
+interface Ethernet50/2
+   shutdown
+!
+interface Ethernet50/3
+   shutdown
+!
+interface Ethernet50/4
+   shutdown
+!
+interface Ethernet51/1
+   shutdown
+!
+interface Ethernet51/2
+   shutdown
+!
+interface Ethernet51/3
+   shutdown
+!
+interface Ethernet51/4
+   shutdown
+!
+interface Ethernet52/1
+   shutdown
+!
+interface Ethernet52/2
+   shutdown
+!
+interface Ethernet52/3
+   shutdown
+!
+interface Ethernet52/4
+   shutdown
+!
+interface Loopback0
+   ip address 172.16.0.2/32
+!
+interface Management1
+   ip address 10.83.28.124/22
+!
+ip route 0.0.0.0/0 10.83.28.1
+!
+ip routing
+!
+router bgp 65002
+   router-id 172.16.10.2
+   neighbor 10.10.10.0 remote-as 65001
+   neighbor 10.10.10.0 maximum-routes 12000
+   neighbor 10.10.10.5 remote-as 65003
+   neighbor 10.10.10.5 maximum-routes 12000
+   redistribute connected
+!
+management api http-commands
+   protocol http
+   no shutdown
+!
+end
