@@ -14,16 +14,9 @@ This repository has Ansible playbooks examples to automate Arista EOS.
 
 # Description of some playbooks 
 
-- The playbook [playbook_collect_commands.yml](playbook_collect_commands.yml): 
-  - runs the EOS `show commands` defined in the file [audit.yml](group_vars/eos/audit.yml)
-  - save the output in the directory [cli](outputs/cli)
-- The playbook [playbook_generate_audit_report.yml](playbook_generate_audit_report.yml): 
-  - collects data from EOS devices and registers the data collected
-  - renders templates to parse the data registered and to generate this report [report.md](outputs/audit/report.md)
-- The playbook [playbook_validate_states.yml](playbook_validate_states.yml): 
-  - collects data from EOS devices 
-  - parses the data collected (to build the actual state)
-  - compares it against the desired state 
+- The playbook [playbook_collect_commands.yml](playbook_collect_commands.yml) collects the EOS `show commands` defined in the file [audit.yml](group_vars/eos/audit.yml) and save the output in the directory [cli](outputs/cli)
+- The playbook [playbook_generate_audit_report.yml](playbook_generate_audit_report.yml) audits the devices and generate this [report](outputs/audit/report.md)
+- The playbook [playbook_validate_states.yml](playbook_validate_states.yml) validate the devices states
 
 # Network topology
 
