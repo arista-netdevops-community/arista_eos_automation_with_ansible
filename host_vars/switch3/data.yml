@@ -1,0 +1,19 @@
+hostname: swicth3
+loopback: 172.16.0.3 
+as: 65003
+topology:
+  - interface: Ethernet2
+    lldp_neighbor: switch1
+    lldp_neighbor_interface: Ethernet4
+    ip: 10.10.10.3
+    subnet: 31
+    ebgp_peer_ip: 10.10.10.2
+    ebgp_peer_loopback: 172.16.0.1 
+  - interface: Ethernet24
+    lldp_neighbor: switch2
+    lldp_neighbor_interface: Ethernet24
+    ip: 10.10.10.5
+    subnet: 31
+    ebgp_peer_ip: 10.10.10.4
+    ebgp_peer_loopback: 172.16.0.2 
+

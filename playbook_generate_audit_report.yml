@@ -1,0 +1,101 @@
+---
+- name: Delete previous reports and create audit directories
+  hosts: localhost
+  gather_facts: false
+  tags: 
+    - clean
+  
+  tasks: 
+
+    - name: delete the audit directory
+      file:
+        path: "{{save_dir}}/audit"
+        state: absent
+  
+    - name: make sure the audit directories exist
+      file:
+        path: "{{save_dir}}/audit/fragments"
+        state: directory
+ 
+- name: collect data on EOS devices and generate an audit report file for each device
+  hosts: eos
+  connection: httpapi
+  gather_facts: false
+  
+  tasks:
+
+    - name: collect devices details
+      eos_command:
+        commands: "show version | json"
+      register: registered_version
+
+    - name: collect interfaces details
+      eos_command:
+        commands: "show interfaces {{item.interface}} description | json"
+      loop: "{{topology}}"
+      when: (item.interface is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      register: registered_interfaces
+    
+    - name: collect LLDP details
+      eos_command:
+        commands: "show lldp neighbors {{item.interface}} | json"
+      loop: "{{topology}}"
+      when: (item.interface is defined) and (item.lldp_neighbor is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      register: registered_lldp 
+
+    - name: run ping to EBGP peers (directly connected)
+      eos_command:
+        commands: "ping {{ item.ebgp_peer_ip }} source {{ item.ip }} repeat 1"
+      loop: "{{topology}}"
+      register: registered_icmp_ebgp
+
+    - name: collect BGP details
+      eos_command:
+        commands: "show ip bgp neighbors {{item.ebgp_peer_ip}} | json"
+      loop: "{{topology}}"
+      when: (item.ebgp_peer_ip is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      register: registered_bgp 
+
+    - name: collect routing table for EBGP peers loopback 
+      eos_command:
+        commands: "show ip route {{ item.ebgp_peer_loopback + ('/32') }} | json"
+      loop: "{{topology}}"
+      when: (item.ebgp_peer_loopback is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      register: registered_routing
+
+    - name: run ping from a local interface to EBGP peers loopback
+      eos_command:
+        commands: "ping {{ item.ebgp_peer_loopback }} source {{ item.ip }} repeat 1 "
+      loop: "{{topology}}"
+      when: (item.ebgp_peer_loopback is defined) and (item.ip is defined)
+      register: registered_icmp_from_local_to_ebgp_loopback
+
+    - name: run ping from local loopback to EBGP peers loopback
+      eos_command:
+        commands: "ping {{ item.ebgp_peer_loopback }} source {{ loopback }} repeat 1 "
+      loop: "{{topology}}"
+      when: (item.ebgp_peer_loopback is defined)
+      register: registered_icmp_from_loopback_to_ebgp_loopback
+
+    - name: generate report files from a template for each device
+      template: 
+        src: "{{playbook_dir}}/templates/audit_report.j2"
+        dest: "{{save_dir}}/audit/fragments/{{inventory_hostname}}.md"
+        lstrip_blocks: yes
+ 
+- name: assemble all reports 
+  hosts: localhost
+  gather_facts: false
+  
+  tasks: 
+
+    - name: Assembling all reports 
+      assemble:  
+        src: "{{save_dir}}/audit/fragments"
+        dest: "{{save_dir}}/audit/report.md"
+  
+    - name: include timestamp at beginning of report file
+      lineinfile:
+        path: "{{save_dir}}/audit/report.md"
+        line: "Report generated with Ansible ({{ lookup('pipe','date') }})\n"
+        insertbefore: BOF

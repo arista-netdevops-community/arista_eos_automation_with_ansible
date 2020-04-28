@@ -1,0 +1,27 @@
+---
+- name: Run commands on remote EOS devices and save the output
+  hosts: eos
+  connection: httpapi
+  gather_facts: false
+  
+  tasks:
+
+    - name: Create output directory for each EOS device
+      file:
+        path: "{{save_dir}}/cli/{{inventory_hostname}}"
+        state: directory
+
+    - name: run show commands on remote EOS devices
+      eos_command:
+        commands: "{{item}}"
+      with_items: "{{cli_to_collect}}"
+      register: cli_output
+
+    - name: copy commands output in the save directory
+      copy:
+        content: "{{ item.stdout.0 }}"
+        dest: "{{save_dir}}/cli/{{inventory_hostname}}/{{item.item}}.txt"
+      loop: "{{ cli_output.results }}"
+
+
+

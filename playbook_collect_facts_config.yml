@@ -1,0 +1,27 @@
+---
+- name: Make sure the facts directory exists
+  hosts: localhost
+  gather_facts: false
+  
+  tasks: 
+
+    - name: Make sure the facts directory exists
+      file:
+        path: "{{save_dir}}/facts/running_config"
+        state: directory
+
+- name: collect facts from eos devices
+  hosts: eos
+  connection: network_cli
+  gather_facts: false
+  
+  tasks:
+    - name: collect facts from EOS devices
+      eos_facts:
+        gather_subset: config
+      register: facts
+
+    - name: copy running configuration in the facts directory
+      copy:
+        content: "{{facts.ansible_facts.ansible_net_config}}"
+        dest: "{{save_dir}}/facts/running_config/{{inventory_hostname}}.txt"

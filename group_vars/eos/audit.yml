@@ -1,0 +1,12 @@
+cli_to_collect: 
+  - show ip bgp summary
+  - show ip interface brief
+  - show interfaces description
+  - show ip route
+  - show version | json
+  - show running-config
+  - show running-config section bgp
+
+validation: 
+  mode: 
+    loose: true

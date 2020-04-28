@@ -1,0 +1,137 @@
+---
+- name: validate states on EOS devices
+  hosts: eos
+  connection: httpapi
+  gather_facts: false
+  tags: 
+    - audit
+  
+  tasks:
+
+    - name: run show version on remote EOS devices
+      eos_command:
+        commands: "show version | json"
+      register: eos_version
+
+    - name: Print some details regarding EOS devices
+      debug:
+        msg: "The device {{ inventory_hostname }} is a {{eos_version.stdout_lines.0.modelName}} model running EOS version {{eos_version.stdout_lines.0.version}}"
+
+    - name: validate interfaces admin state (interfaces between devices)
+      eos_command:
+        commands: "show interfaces {{item.interface}} description | json"
+        waitfor:
+          - result[0].interfaceDescriptions.{{item.interface}}.interfaceStatus eq 'up'
+        retries: 2
+        interval: 2
+      loop: "{{topology}}"
+      when: (item.interface is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      ignore_errors: "{{ validation.mode.loose }}"
+      
+    - name: validate interfaces operational state (interfaces between devices)
+      eos_command:
+        commands: "show interfaces {{item.interface}} description | json"
+        waitfor:
+          - result[0].interfaceDescriptions.{{item.interface}}.lineProtocolStatus eq 'up'
+        retries: 2
+        interval: 2
+      loop: "{{topology}}"
+      when: (item.interface is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      ignore_errors: "{{ validation.mode.loose }}"
+
+    - name: validate LLDP topology
+      eos_command:
+        commands: "show lldp neighbors {{item.interface}} | json"
+        waitfor:
+          - "result[0].lldpNeighbors[0].neighborDevice eq {{item.lldp_neighbor}}.{{domain_name}}"
+          - "result[0].lldpNeighbors[0].neighborPort eq {{item.lldp_neighbor_interface}}"
+        retries: 2
+        interval: 2
+      loop: "{{topology}}"
+      when: (item.interface is defined) and (item.lldp_neighbor is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      ignore_errors: "{{ validation.mode.loose }}"
+
+    - name: validate IP reachability with EBGP peers (directly connected)
+      eos_command:
+        commands: "ping {{ item.ebgp_peer_ip }} source {{ item.ip }} repeat 1 "
+        waitfor: result[0] contains '1 received' 
+      loop: "{{topology}}"
+      ignore_errors: "{{ validation.mode.loose }}"
+      when: (item.ebgp_peer_ip is defined) and (item.ip is defined)
+
+#    - name: run icmp ping on remote EOS devices (to EBGP peers)
+#      eos_command:
+#        commands: "ping {{ item.ebgp_peer_ip }} source {{ item.ip }} repeat 1 "
+#      register: registered_icmp_ebgp
+#      loop: "{{topology}}"
+
+#    - name: check packet lost (ping EBGP peers)
+#     assert:
+#        that:
+#          - "'1 received' in item.stdout.0"
+#        quiet: true
+#      loop: "{{ registered_icmp_ebgp.results }}"    
+#      ignore_errors: "{{ validation.mode.loose }}"
+       
+    - name: validate EBGP sessions state
+      eos_command:
+        commands: "show ip bgp neighbors {{item.ebgp_peer_ip}} | json"
+        waitfor:
+          - "result[0].vrfs.default.peerList[0].state eq 'Established'"
+        retries: 2
+        interval: 2
+      loop: "{{topology}}"
+      when: (item.ebgp_peer_ip is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      ignore_errors: "{{ validation.mode.loose }}"
+
+    - name: validate some ipv4 prefixes are sent to each EBGP neighbor 
+      eos_command:
+        commands: "show ip bgp neighbors {{item.ebgp_peer_ip}} | json"
+        waitfor:
+          - "result[0].vrfs.default.peerList[0].prefixesSent gt '1'"
+        retries: 2
+        interval: 2
+      loop: "{{topology}}"
+      when: (item.ebgp_peer_ip is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      ignore_errors: "{{ validation.mode.loose }}"
+
+    - name: validate some ipv4 prefixes are received from each EBGP neighbor 
+      eos_command:
+        commands: "show ip bgp neighbors {{item.ebgp_peer_ip}} | json"
+        waitfor:
+          - "result[0].vrfs.default.peerList[0].prefixesReceived gt '1'"
+        retries: 2
+        interval: 2
+      loop: "{{topology}}"
+      when: (item.ebgp_peer_ip is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      ignore_errors: "{{ validation.mode.loose }}"
+
+    - name: validate the routing table (both the via nexthop and the via interface) for the loopback address of each EBGP neighbor
+      eos_command:
+        commands: "show ip route {{ item.ebgp_peer_loopback + ('/32') }} | json"
+        waitfor:
+          - result[0][vrfs][default][routes][{{ item.ebgp_peer_loopback + ('/32') }}][vias][0][nexthopAddr] eq {{item.ebgp_peer_ip}}
+          - result[0]['vrfs']['default']['routes']['{{ item.ebgp_peer_loopback + ("/32") }}']['vias'][0]['interface'] eq {{item.interface}}
+        retries: 2
+        interval: 2
+      loop: "{{topology}}"
+      when: (item.ebgp_peer_loopback is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      ignore_errors: "{{ validation.mode.loose }}"
+
+    - name: validate IP reachability from a local interface to EBGP peers loopback
+      eos_command:
+        commands: "ping {{ item.ebgp_peer_loopback }} source {{ item.ip }} repeat 1 "
+        waitfor: result[0] contains '1 received' 
+      loop: "{{topology}}"
+      ignore_errors: "{{ validation.mode.loose }}"
+      when: (item.ebgp_peer_loopback is defined) and (item.ip is defined)
+
+    - name: validate IP reachability from local loopback to EBGP peers loopback
+      eos_command:
+        commands: "ping {{ item.ebgp_peer_loopback }} source {{ loopback }} repeat 1 "
+        waitfor: result[0] contains '1 received' 
+      loop: "{{topology}}"
+      ignore_errors: "{{ validation.mode.loose }}"
+      when: (item.ebgp_peer_loopback is defined)
+
+

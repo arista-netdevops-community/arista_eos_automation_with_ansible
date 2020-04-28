@@ -1,0 +1,7 @@
+router bgp 65003
+   maximum-paths 2 ecmp 2
+   neighbor 10.10.10.2 remote-as 65001
+   neighbor 10.10.10.2 maximum-routes 12000 
+   neighbor 10.10.10.4 remote-as 65002
+   neighbor 10.10.10.4 maximum-routes 12000 
+   redistribute connected

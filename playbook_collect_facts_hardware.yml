@@ -1,0 +1,31 @@
+---
+- name: Make sure the facts directory exists
+  hosts: localhost
+  gather_facts: false
+  
+  tasks: 
+
+    - name: Make sure the facts directory exists
+      file:
+        path: "{{save_dir}}/facts/hardware"
+        state: directory
+
+- name: collect facts from EOS devices and display some details
+  hosts: eos
+  connection: network_cli
+  gather_facts: false
+  
+  tasks:
+    - name: collect facts from EOS devices
+      eos_facts:
+        gather_subset: hardware
+      register: facts
+
+    - name: copy facts in the facts directory
+      copy:
+        content: "{{facts.ansible_facts}}"
+        dest: "{{save_dir}}/facts/hardware/{{inventory_hostname}}.json"
+
+    - name: Display some facts
+      debug:
+        msg: "The device {{facts.ansible_facts.ansible_net_hostname}} is a {{facts.ansible_facts.ansible_net_model}} model running the version {{facts.ansible_facts.ansible_net_version}}"

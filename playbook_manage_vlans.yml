@@ -1,0 +1,21 @@
+---
+- name: Configure VLANS and L2 interfaces
+  hosts: eos
+  connection: network_cli
+  gather_facts: false
+  
+  tasks:
+  
+    - name: Configure VLANS 
+      eos_vlans:
+        config: "{{ vlans }}"
+        state: overridden
+      when: (vlans is defined)
+ 
+    - name: Configure L2 interfaces
+      eos_l2_interfaces:
+        config: "{{ l2_interfaces }}"
+        state: overridden
+      when: (l2_interfaces is defined)
+  
+

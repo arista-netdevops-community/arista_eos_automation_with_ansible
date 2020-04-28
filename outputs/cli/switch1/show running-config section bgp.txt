@@ -1,0 +1,6 @@
+router bgp 65001
+   neighbor 10.10.10.1 remote-as 65002
+   neighbor 10.10.10.1 maximum-routes 12000
+   neighbor 10.10.10.3 remote-as 65003
+   neighbor 10.10.10.3 maximum-routes 12000
+   redistribute connected

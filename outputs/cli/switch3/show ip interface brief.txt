@@ -1,0 +1,5 @@
+Interface              IP Address         Status     Protocol         MTU
+Ethernet2              10.10.10.3/31      up         up              1500
+Ethernet24             10.10.10.5/31      up         up              1500
+Loopback0              172.16.0.3/32      up         up             65535
+Management1            10.83.28.125/22    up         up              1500

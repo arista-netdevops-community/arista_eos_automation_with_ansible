@@ -1,0 +1,11 @@
+l2_interfaces: 
+  - name: Ethernet5
+    access:
+      vlan: 30
+  - name: Ethernet6
+    access:
+      vlan: 40
+  - name: Ethernet7
+    trunk:
+      native_vlan: 10
+      trunk_allowed_vlans: 20, 30, 40
