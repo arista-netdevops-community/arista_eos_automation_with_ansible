@@ -18,14 +18,14 @@
   
   tasks:
 
-    - name: generate EOS configuration
+    - name: generate EOS configuration from a template
       template:
         src: "{{playbook_dir}}/templates/config.j2"
         dest: "{{save_dir}}/conf_generated/{{ inventory_hostname }}.cfg"
         trim_blocks: yes
       check_mode: no
 
-    - name: configure EOS devices from a template
+    - name: configure EOS devices 
       eos_config:
         src: "{{ playbook_dir }}/outputs/conf_generated/{{ inventory_hostname }}.cfg"
         diff_against: session
