@@ -29,7 +29,7 @@
       eos_config:
         src: "{{ playbook_dir }}/outputs/conf_generated/{{ inventory_hostname }}.cfg"
         diff_against: session
-        backup: yes
+        backup: no
         backup_options:
           dir_path: "{{ playbook_dir }}/backup" 
 
