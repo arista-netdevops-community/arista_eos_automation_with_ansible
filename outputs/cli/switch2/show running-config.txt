@@ -48,6 +48,7 @@ interface Ethernet1
    shutdown
 !
 interface Ethernet2
+   description "switch1 **** Ethernet3"
    no switchport
    ip address 10.10.10.1/31
 !
@@ -119,6 +120,7 @@ interface Ethernet23
    shutdown
 !
 interface Ethernet24
+   description "switch3 **** Ethernet24"
    no switchport
    ip address 10.10.10.4/31
 !

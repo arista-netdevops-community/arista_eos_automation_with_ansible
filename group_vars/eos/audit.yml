@@ -1,5 +1,6 @@
 cli_to_collect: 
   - show ip bgp summary
+  - show lldp neighbors 
   - show ip interface brief
   - show interfaces description
   - show ip route

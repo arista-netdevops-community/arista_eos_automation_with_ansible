@@ -1,6 +1,6 @@
 Interface                      Status         Protocol           Description
 Et1                            admin down     down               
-Et2                            up             up                 
+Et2                            up             up                 "switch1 **** Ethernet3"
 Et3                            admin down     down               
 Et4                            admin down     down               
 Et5                            admin down     notpresent         
@@ -22,7 +22,7 @@ Et20                           admin down     notpresent
 Et21                           admin down     notpresent         
 Et22                           admin down     notpresent         
 Et23                           admin down     notpresent         
-Et24                           up             up                 
+Et24                           up             up                 "switch3 **** Ethernet24"
 Et25                           admin down     notpresent         
 Et26                           admin down     notpresent         
 Et27                           admin down     notpresent         

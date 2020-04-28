@@ -1,12 +1,12 @@
 Interface                      Status         Protocol           Description
 Et1                            admin down     down               
 Et2                            admin down     down               
-Et3                            up             up                 
-Et4                            up             up                 
+Et3                            up             up                 "switch2 **** Ethernet2"
+Et4                            up             up                 "switch3 **** Ethernet2"
 Et5                            admin down     down               
 Et6                            admin down     down               
 Et7                            admin down     down               
-Et8                            admin down     down               
+Et8                            up             up                 "testing ansible module eos_config"
 Et9                            admin down     notpresent         
 Et10                           admin down     notpresent         
 Et11                           admin down     notpresent         
