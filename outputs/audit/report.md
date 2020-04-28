@@ -1,4 +1,4 @@
-Report generated with Ansible (Tue 28 Apr 2020 10:44:48 CEST)
+Report generated with Ansible (Tue 28 Apr 2020 10:54:05 CEST)
 
 ## Report for device switch1
 
@@ -45,12 +45,12 @@ Report generated with Ansible (Tue 28 Apr 2020 10:44:48 CEST)
 | 172.16.0.3/32 | 10.10.10.3 | Ethernet4 | PASS |
 ### Ping EBGP peers loopback (switch1)
 | Source | Destination | Result |
-| :-----: | :-----: | :-----: | :-----: | 
+| :-----: | :-----: | :-----: | 
 | 10.10.10.0  | 172.16.0.2 | PASS | 
 | 10.10.10.2  | 172.16.0.3 | PASS |
 ### Ping EBGP peers loopback from switch1 loopback 
 | Source | Destination | Result |
-| :-----: | :-----: | :-----: | :-----: | 
+| :-----: | :-----: | :-----: | 
 | 172.16.0.1  | 172.16.0.2 | PASS | 
 | 172.16.0.1  | 172.16.0.3 | PASS |
 ## Report for device switch2
@@ -98,11 +98,11 @@ Report generated with Ansible (Tue 28 Apr 2020 10:44:48 CEST)
 | 172.16.0.3/32 | 10.10.10.5 | Ethernet24 | PASS |
 ### Ping EBGP peers loopback (switch2)
 | Source | Destination | Result |
-| :-----: | :-----: | :-----: | :-----: | 
+| :-----: | :-----: | :-----: | 
 | 10.10.10.1  | 172.16.0.1 | PASS | 
 | 10.10.10.4  | 172.16.0.3 | PASS |
 ### Ping EBGP peers loopback from switch2 loopback 
 | Source | Destination | Result |
-| :-----: | :-----: | :-----: | :-----: | 
+| :-----: | :-----: | :-----: | 
 | 172.16.0.2  | 172.16.0.1 | PASS | 
 | 172.16.0.2  | 172.16.0.3 | PASS |

@@ -43,11 +43,11 @@
 | 172.16.0.3/32 | 10.10.10.5 | Ethernet24 | PASS |
 ### Ping EBGP peers loopback (switch2)
 | Source | Destination | Result |
-| :-----: | :-----: | :-----: | :-----: | 
+| :-----: | :-----: | :-----: | 
 | 10.10.10.1  | 172.16.0.1 | PASS | 
 | 10.10.10.4  | 172.16.0.3 | PASS |
 ### Ping EBGP peers loopback from switch2 loopback 
 | Source | Destination | Result |
-| :-----: | :-----: | :-----: | :-----: | 
+| :-----: | :-----: | :-----: | 
 | 172.16.0.2  | 172.16.0.1 | PASS | 
 | 172.16.0.2  | 172.16.0.3 | PASS |

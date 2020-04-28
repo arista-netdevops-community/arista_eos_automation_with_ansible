@@ -110,7 +110,7 @@
 ### Ping EBGP peers loopback ({{ inventory_hostname }})
 {# loopback address of each EBGP neighbor is defined in YAML. The devices should be able to ping their EBGP neighbors #}
 | Source | Destination | Result |
-| :-----: | :-----: | :-----: | :-----: |  
+| :-----: | :-----: | :-----: | 
 {%- for item in registered_icmp_from_loopback_to_ebgp_loopback.results %}
     {% set source = item.item.ip %}
     {% set destination = item.item.ebgp_peer_loopback %}
@@ -125,7 +125,7 @@
 ### Ping EBGP peers loopback from {{ inventory_hostname }} loopback 
 {# loopback address of each EBGP neighbor is defined in YAML. The devices should be able to ping their EBGP neighbors #}
 | Source | Destination | Result |
-| :-----: | :-----: | :-----: | :-----: |  
+| :-----: | :-----: | :-----: |  
 {%- for item in registered_icmp_from_loopback_to_ebgp_loopback.results %}
     {% set source = hostvars[inventory_hostname]['loopback'] %}
     {% set destination = item.item.ebgp_peer_loopback %}
