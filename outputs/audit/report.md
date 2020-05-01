@@ -1,9 +1,9 @@
-Report generated with Ansible (Fri  1 May 2020 17:37:10 CEST)
+Report generated with Ansible (Fri  1 May 2020 17:54:46 CEST)
 
 # Report structure
-[Report for device switch1.lab.local](#report-for-device-switch1.lab.local)  
-[Report for device switch2.lab.local](#report-for-device-switch2.lab.local)  
-[Report for device switch3.lab.local](#report-for-device-switch3.lab.local)  
+[Report for device switch1.lab.local](#report-for-device-switch1.lablocal)  
+[Report for device switch2.lab.local](#report-for-device-switch2.lablocal)  
+[Report for device switch3.lab.local](#report-for-device-switch3.lablocal)  
 ***************************************************
 # Report for device switch1.lab.local
 
