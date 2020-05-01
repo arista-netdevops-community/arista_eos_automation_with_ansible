@@ -1,15 +1,15 @@
-# Report for device switch2
+# Report for device switch2.lab.local
 
 ## Device details
    
 
-| Hostname | domain name | Model | Version |
-| :-----: | :-----: | :-----: | :-----: | 
-| switch2 | lab.local | DCS-7150S-64-CL-F | 4.22.4M-2GB |
+| Hostname | Model | Version |
+| :-----: | :-----: | :-----: | 
+| switch2 | DCS-7150S-64-CL-F | 4.22.4M-2GB |
 
 ## Interfaces admin and operationnal status 
 
-### switch2 interfaces connected to the other devices
+### switch2 interfaces connected to other devices
 
 | Interface | Admin status | operationnal Status | Result |
 | :-----: | :-----: | :-----: | :-----: | 
@@ -32,7 +32,7 @@
 ### BGP prefixes
 | Peer | IPv4 Prefixes sent | IPv4 Prefixes received | Result |
 | :-----: | :-----: | :-----: | :-----: | 
-| 10.10.10.0 | 5 | 6 | PASS 
+| 10.10.10.0 | 5 | 5 | PASS 
 | 10.10.10.5 | 6 | 6 | PASS
 ### Routing table
 | EBGP peer loopback | via next hop | via interface | Result |

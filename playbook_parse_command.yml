@@ -1,0 +1,16 @@
+---
+- name: print EOS version and HW model
+  hosts: eos
+  connection: httpapi
+  gather_facts: false
+  
+  tasks:
+
+    - name: run show version on EOS devices
+      eos_command:
+        commands: "show version | json"
+      register: eos_version
+
+    - name: Print some details regarding EOS devices
+      debug:
+        msg: "The device {{ inventory_hostname }} is a {{eos_version.stdout_lines.0.modelName}} model running EOS version {{eos_version.stdout_lines.0.version}}"

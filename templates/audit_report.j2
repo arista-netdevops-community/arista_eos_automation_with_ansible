@@ -1,13 +1,13 @@
-# Report for device {{ inventory_hostname }}
+# Report for device {{ inventory_hostname }}.{{ domain_name }}
 
 ## Device details
 {# The Ansible inventory file defines the devices #}   
 {% set MODEL = registered_version.stdout_lines.0.modelName %}
 {% set VERSION = registered_version.stdout_lines.0.version %}
 
-| Hostname | domain name | Model | Version |
-| :-----: | :-----: | :-----: | :-----: | 
-| {{ inventory_hostname }} | {{ domain_name }} | {{ MODEL }} | {{ VERSION }} |
+| Hostname | Model | Version |
+| :-----: | :-----: | :-----: | 
+| {{ inventory_hostname }} | {{ MODEL }} | {{ VERSION }} |
 
 ## Interfaces admin and operationnal status 
 

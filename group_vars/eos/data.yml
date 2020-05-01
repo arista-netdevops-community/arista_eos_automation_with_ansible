@@ -1,4 +1,5 @@
-domain_name: "lab.local"
+version: 4.22.4M-2GB
+model: DCS-7150S-64-CL-F
 
 vlans: 
   - vlan_id: 10

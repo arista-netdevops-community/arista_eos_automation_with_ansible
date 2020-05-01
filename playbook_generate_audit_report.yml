@@ -93,7 +93,6 @@
       template: 
         src: "{{playbook_dir}}/templates/audit_report_structure.j2"
         dest: "{{save_dir}}/audit/fragments/_audit_report_structure.md"
-        lstrip_blocks: yes
 
     - name: Assembling all reports 
       assemble:  
