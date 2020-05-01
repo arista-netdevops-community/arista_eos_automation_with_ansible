@@ -29,6 +29,11 @@
         commands: "show version | json"
       register: registered_version
 
+    - name: collect power supplies status
+      eos_command:
+        commands: "show environment power | json"
+      register: registered_power
+
     - name: collect interfaces details
       eos_command:
         commands: "show interfaces {{item.interface}} description | json"

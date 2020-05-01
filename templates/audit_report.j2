@@ -1,20 +1,46 @@
 # Report for device {{ inventory_hostname }}.{{ domain_name }}
 
-## Device details
-{# The Ansible inventory file defines the devices #}   
-{% set MODEL = registered_version.stdout_lines.0.modelName %}
-{% set VERSION = registered_version.stdout_lines.0.version %}
+## Device details ({{ inventory_hostname }})
 
-| Hostname | Model | Version |
+### HW model 
+{# The expected hw model is defined in yaml #}
+{# The actual hw model should be equal to the expected model #}
+
+{% set hw_model = registered_version.stdout_lines.0.modelName %}
+{% if (hw_model == model) %}
+    {% set result = 'PASS' %} 
+{% else %}
+    {% set result = 'FAIL' %} 
+{% endif %}
+
+| Expected model | Actual model | Result |
+| :-----: | :-----: | :-----: | :-----: | :-----: | 
+| {{ model }} | {{ hw_model }} | {{ result | default('FAIL') }} |
+
+### SW version 
+{# The expected EOS version is defined in yaml #}
+{# The actual EOS version should be equal to the expected EOS version #}
+
+{% set eos_version = registered_version.stdout_lines.0.version %}
+{% if (eos_version == version) %}
+    {% set result = 'PASS' %} 
+{% else %}
+    {% set result = 'FAIL' %} 
+{% endif %}
+
+
+| Expected version | Actual version | Result |
 | :-----: | :-----: | :-----: | 
-| {{ inventory_hostname }} | {{ MODEL }} | {{ VERSION }} |
+| {{ version }} | {{ eos_version }} | {{ result | default('FAIL') }} |
 
-## Interfaces admin and operationnal status 
+## Environment ({{ inventory_hostname }})
 
-### {{ inventory_hostname }} interfaces connected to other devices
+## Interfaces admin and operationnal status ({{ inventory_hostname }})
+
+### interfaces connected to other devices
 
 {# Interfaces between devices are described in YAML files. Their actual state should be up/up #}
-| Interface | Admin status | operationnal Status | Result |
+| Interface | Admin status | Operationnal Status | Result |
 | :-----: | :-----: | :-----: | :-----: | 
 {%- for item in registered_interfaces.results %}
     {% set interface = item.item.interface %}
@@ -30,7 +56,7 @@
 
 ## LLDP topology ({{ inventory_hostname }})
 {# The topology is described in YAML files. The collected lldp details should match the topology described #}  
-| Interface | Expected neighbor | Expected neighbor interface | actual neighbor | actual neighbor interface | Result |
+| Interface | Expected neighbor | Actual neighbor | Expected neighbor interface | Actual neighbor interface | Result |
 | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | 
 {%- for item in registered_lldp.results %}
     {% set interface = item.item.interface %}
@@ -43,14 +69,14 @@
     {% else %}
         {% set result = 'FAIL' %} 
     {% endif %}
-| {{ interface }} | {{ expected_neighbor }} | {{ expected_neighbor_interface }} | {{ actual_neighbor }} | {{ actual_neighbor_interface }} | {{ result | default('FAIL')}} |
+| {{ interface }} | {{ expected_neighbor }} | {{ actual_neighbor }} | {{ expected_neighbor_interface }} | {{ actual_neighbor_interface }} | {{ result | default('FAIL')}} |
 {%- endfor %}
 
 ## BGP ({{ inventory_hostname }})
 
 ###  EBGP sessions state
 {# EBGP neighbors described in YAML files. BGP sessions should be established #} 
-| Peer | State | Result |
+| EBGP Peer | Session state | Result |
 | :-----: | :-----: | :-----: |  
 {%- for item in registered_bgp.results %}
     {% set peer = item.item.ebgp_peer_ip %}
@@ -63,25 +89,47 @@
 | {{ peer }} | {{ state }} | {{ result | default('FAIL')}} |
 {%- endfor %}
 
-### BGP prefixes
-{# EBGP neighbors described in YAML files. Some IPv4 prefixes should be sent and received with each BGP neighbors #}
-| Peer | IPv4 Prefixes sent | IPv4 Prefixes received | Result |
-| :-----: | :-----: | :-----: | :-----: |  
+### IPv4 prefixes sent to EBGP peer 
+
+{# EBGP neighbors described in YAML files #}
+{# Some IPv4 prefixes should be sent to each EBGP neighbors #} 
+
+| EBGP Peer | IPv4 Prefixes sent | Result |
+| :-----: | :-----: | :-----: |   
 {%- for item in registered_bgp.results %}
     {% set peer = item.item.ebgp_peer_ip %}
     {% set prefixes_sent = item.stdout.0.vrfs.default.peerList[0].prefixesSent %}
-    {% set prefixes_received = item.stdout.0.vrfs.default.peerList[0].prefixesReceived %}
-    {% if (prefixes_received >= 1) and (prefixes_sent >= 1) %}
+    {% if (prefixes_sent >= 1) %}
         {% set result = 'PASS' %} 
     {% else %}
         {% set result = 'FAIL' %}
      {% endif %}
-| {{ peer }} | {{ prefixes_sent }} | {{ prefixes_received }} | {{ result | default('FAIL')}}
+| {{ peer }} | {{ prefixes_sent }} | {{ result | default('FAIL')}} |
+{%- endfor %}
+
+### IPv4 prefixes received from EBGP peer
+
+{# EBGP neighbors described in YAML files #}
+{# Some IPv4 prefixes should be received from each BGP neighbors #}
+
+| EBGP Peer | IPv4 Prefixes received | Result |
+| :-----: | :-----: | :-----: |  
+{%- for item in registered_bgp.results %}
+    {% set peer = item.item.ebgp_peer_ip %}
+    {% set prefixes_received = item.stdout.0.vrfs.default.peerList[0].prefixesReceived %}
+    {% if (prefixes_received >= 1) %}
+        {% set result = 'PASS' %} 
+    {% else %}
+        {% set result = 'FAIL' %}
+     {% endif %}
+| {{ peer }} | {{ prefixes_received }} | {{ result | default('FAIL')}}
 {%- endfor %}
 
 ### Routing table
-{# loopback address of each EBGP neighbor is defined in YAML. Validate the routing table (including via nexthop and the via interface) for this address #}
-| EBGP peer loopback | via next hop | via interface | Result |
+
+{# loopback address of each EBGP neighbor is defined in YAML #}
+{# Validate the routing table (including the "via nexthop" and the "via interface") for this address #}
+| Route to EBGP peer loopback | via next hop | via interface | Result |
 | :-----: | :-----: | :-----: | :-----: |  
 {%- for item in registered_routing.results %}
     {% set address = item.item.ebgp_peer_loopback + ('/32') %}
@@ -95,42 +143,48 @@
 | {{ address }} | {{ via_next_hop }} | {{ via_interface }} | {{ result | default('FAIL')}} |
 {%- endfor %}
 
-## IP reachability  
+## IP reachability ({{ inventory_hostname }})
 
-### Ping EBGP peers
-{# EBGP neighbors described in YAML files. The devices should be able to ping their EBGP neighbors #}
+### Ping EBGP peers from {{ inventory_hostname }} interfaces
+{# EBGP neighbors described in YAML files #} 
+{# The devices should be able to ping their EBGP neighbors #}
 
-| Source ({{ inventory_hostname }}) | destination (EBGP peer) | Result |
-| :-----: | :-----: | :-----: | 
+| source interface | IP source | IP destination (EBGP peer) | Result |
+| :-----: | :-----: | :-----: | :-----: | 
+
 {%- for item in registered_icmp_ebgp.results %}
     {% set source = item.item.ip %}
     {% set destination = item.item.ebgp_peer_ip %}
+    {% set interface = item.item.interface %}
     {% if "1 received" in item.stdout.0 %}
             {% set result = 'PASS' %} 
     {% else %}
         {% set result = 'FAIL' %} 
     {% endif %}
-| {{ source }}  | {{ destination }} | {{ result | default('FAIL')}} |
+| {{ interface }} | {{ source }}  | {{ destination }} | {{ result | default('FAIL')}} |
 {%- endfor %}
 
-### Ping EBGP peers loopback
-{# loopback address of each EBGP neighbor is defined in YAML. The devices should be able to ping their EBGP neighbors #}
-| Source ({{ inventory_hostname }}) | Destination (EBGP peer loopback) | Result |
-| :-----: | :-----: | :-----: | 
+### Ping EBGP peers loopback from {{ inventory_hostname }} interfaces
+{# loopback address of each EBGP neighbor is defined in YAML #}
+{# The devices should be able to ping their EBGP neighbors #}
+
+| source interface | IP source | IP destination (EBGP peer loopback) | Result |
+| :-----: | :-----: | :-----: | :-----: | 
 {%- for item in registered_icmp_from_loopback_to_ebgp_loopback.results %}
     {% set source = item.item.ip %}
     {% set destination = item.item.ebgp_peer_loopback %}
+    {% set interface = item.item.interface %}
     {% if "1 received" in item.stdout.0 %}
             {% set result = 'PASS' %} 
     {% else %}
         {% set result = 'FAIL' %} 
     {% endif %}
-| {{ source }}  | {{ destination }} | {{ result | default('FAIL')}} |
+| {{ interface }} | {{ source }}  | {{ destination }} | {{ result | default('FAIL')}} |
 {%- endfor %}
 
 ### Ping EBGP peers loopback from {{ inventory_hostname }} loopback 
 {# loopback address of each EBGP neighbor is defined in YAML. The devices should be able to ping their EBGP neighbors #}
-| Source ({{ inventory_hostname }} loopback) | Destination (EBGP peer loopback) | Result |
+| IP source | IP destination (EBGP peer loopback) | Result |
 | :-----: | :-----: | :-----: |  
 {%- for item in registered_icmp_from_loopback_to_ebgp_loopback.results %}
     {% set source = hostvars[inventory_hostname]['loopback'] %}

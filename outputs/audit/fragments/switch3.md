@@ -1,59 +1,86 @@
 # Report for device switch3.lab.local
 
-## Device details
-   
+## Device details (switch3)
 
-| Hostname | Model | Version |
+### HW model 
+
+ 
+
+| Expected model | Actual model | Result |
+| :-----: | :-----: | :-----: | :-----: | :-----: | 
+| DCS-7150S-64-CL-F | DCS-7150S-64-CL-F | PASS |
+
+### SW version 
+
+ 
+
+
+| Expected version | Actual version | Result |
 | :-----: | :-----: | :-----: | 
-| switch3 | DCS-7150S-64-CL-F | 4.22.4M-2GB |
+| 4.22.4M-2GB | 4.22.4M-2GB | PASS |
 
-## Interfaces admin and operationnal status 
+## Environment (switch3)
 
-### switch3 interfaces connected to other devices
+## Interfaces admin and operationnal status (switch3)
 
-| Interface | Admin status | operationnal Status | Result |
+### interfaces connected to other devices
+
+| Interface | Admin status | Operationnal Status | Result |
 | :-----: | :-----: | :-----: | :-----: | 
 | Ethernet2 | up | up | PASS 
 | Ethernet24 | up | up | PASS
 ## LLDP topology (switch3)
   
-| Interface | Expected neighbor | Expected neighbor interface | actual neighbor | actual neighbor interface | Result |
+| Interface | Expected neighbor | Actual neighbor | Expected neighbor interface | Actual neighbor interface | Result |
 | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | 
-| Ethernet2 | switch1.lab.local | Ethernet4 | switch1.lab.local | Ethernet4 | PASS | 
-| Ethernet24 | switch2.lab.local | Ethernet24 | switch2.lab.local | Ethernet24 | PASS |
+| Ethernet2 | switch1.lab.local | switch1.lab.local | Ethernet4 | Ethernet4 | PASS | 
+| Ethernet24 | switch2.lab.local | switch2.lab.local | Ethernet24 | Ethernet24 | PASS |
 ## BGP (switch3)
 
 ###  EBGP sessions state
  
-| Peer | State | Result |
+| EBGP Peer | Session state | Result |
 | :-----: | :-----: | :-----: | 
 | 10.10.10.2 | Established | PASS | 
 | 10.10.10.4 | Established | PASS |
-### BGP prefixes
-| Peer | IPv4 Prefixes sent | IPv4 Prefixes received | Result |
-| :-----: | :-----: | :-----: | :-----: | 
-| 10.10.10.2 | 5 | 6 | PASS 
-| 10.10.10.4 | 6 | 6 | PASS
+### IPv4 prefixes sent to EBGP peer 
+
+ 
+
+| EBGP Peer | IPv4 Prefixes sent | Result |
+| :-----: | :-----: | :-----: | 
+| 10.10.10.2 | 5 | PASS | 
+| 10.10.10.4 | 6 | PASS |
+### IPv4 prefixes received from EBGP peer
+
+
+| EBGP Peer | IPv4 Prefixes received | Result |
+| :-----: | :-----: | :-----: | 
+| 10.10.10.2 | 6 | PASS 
+| 10.10.10.4 | 6 | PASS
 ### Routing table
-| EBGP peer loopback | via next hop | via interface | Result |
+
+| Route to EBGP peer loopback | via next hop | via interface | Result |
 | :-----: | :-----: | :-----: | :-----: | 
 | 172.16.0.1/32 | 10.10.10.2 | Ethernet2 | PASS | 
 | 172.16.0.2/32 | 10.10.10.4 | Ethernet24 | PASS |
-## IP reachability  
+## IP reachability (switch3)
 
-### Ping EBGP peers
+### Ping EBGP peers from switch3 interfaces
+ 
 
-| Source (switch3) | destination (EBGP peer) | Result |
-| :-----: | :-----: | :-----: | 
-| 10.10.10.3  | 10.10.10.2 | PASS | 
-| 10.10.10.5  | 10.10.10.4 | PASS |
-### Ping EBGP peers loopback
-| Source (switch3) | Destination (EBGP peer loopback) | Result |
-| :-----: | :-----: | :-----: | 
-| 10.10.10.3  | 172.16.0.1 | PASS | 
-| 10.10.10.5  | 172.16.0.2 | PASS |
+| source interface | IP source | IP destination (EBGP peer) | Result |
+| :-----: | :-----: | :-----: | :-----: | 
+| Ethernet2 | 10.10.10.3  | 10.10.10.2 | PASS | 
+| Ethernet24 | 10.10.10.5  | 10.10.10.4 | PASS |
+### Ping EBGP peers loopback from switch3 interfaces
+
+| source interface | IP source | IP destination (EBGP peer loopback) | Result |
+| :-----: | :-----: | :-----: | :-----: | 
+| Ethernet2 | 10.10.10.3  | 172.16.0.1 | PASS | 
+| Ethernet24 | 10.10.10.5  | 172.16.0.2 | PASS |
 ### Ping EBGP peers loopback from switch3 loopback 
-| Source (switch3 loopback) | Destination (EBGP peer loopback) | Result |
+| IP source | IP destination (EBGP peer loopback) | Result |
 | :-----: | :-----: | :-----: | 
 | 172.16.0.3  | 172.16.0.1 | PASS | 
 | 172.16.0.3  | 172.16.0.2 | PASS |

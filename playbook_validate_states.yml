@@ -14,7 +14,6 @@
         waitfor:
           - result[0].modelName eq '{{ model }}'
           - result[0].version eq '{{ version }}'
-      register: eos_version
 
     - name: collect power supplies status
       eos_command:
