@@ -1,4 +1,4 @@
-Report generated with Ansible (Fri  1 May 2020 22:40:12 CEST)
+Report generated with Ansible (Sat  2 May 2020 01:31:59 CEST)
 
 # Audit report structure
 [Report for device switch1.lab.local](#report-for-device-switch1lablocal)  
@@ -26,7 +26,41 @@ Report generated with Ansible (Fri  1 May 2020 22:40:12 CEST)
 | :-----: | :-----: | :-----: | 
 | 4.22.4M-2GB | 4.22.4M-2GB | PASS |
 
-## Environment (switch1)
+## Environment (switch1)  
+
+### Power 
+
+| Power Supply | State | Result |
+| :-----: | :-----: | :-----: | 
+| 1 | powerLoss | FAIL | 
+| 2 | ok | PASS | 
+
+### Temperature
+
+ 
+
+| System temperature status| Result |
+| :-----: | :-----: | 
+| temperatureOk | PASS |
+
+### Cooling
+
+#### Power supplies 
+
+| Power Supply | Fans status | Result |
+| :-----: | :-----: | :-----: | 
+| PowerSupply1 | ok | PASS | 
+| PowerSupply2 | ok | PASS | 
+
+#### Fan trays
+
+| Fan tray | Fans status | Result |
+| :-----: | :-----: | :-----: | 
+| 1 | ok | PASS | 
+| 2 | ok | PASS | 
+| 3 | ok | PASS | 
+| 4 | ok | PASS | 
+
 
 ## Interfaces admin and operationnal status (switch1)
 
@@ -67,7 +101,7 @@ Report generated with Ansible (Fri  1 May 2020 22:40:12 CEST)
 | 10.10.10.3 | 5 | PASS
 ### Routing table
 
-| Route to EBGP peer loopback | via next hop | via interface | Result |
+| Destination (EBGP peer loopback) | via next hop | via interface | Result |
 | :-----: | :-----: | :-----: | :-----: | 
 | 172.16.0.2/32 | 10.10.10.1 | Ethernet3 | PASS | 
 | 172.16.0.3/32 | 10.10.10.3 | Ethernet4 | PASS |
@@ -113,7 +147,41 @@ Report generated with Ansible (Fri  1 May 2020 22:40:12 CEST)
 | :-----: | :-----: | :-----: | 
 | 4.22.4M-2GB | 4.22.4M-2GB | PASS |
 
-## Environment (switch2)
+## Environment (switch2)  
+
+### Power 
+
+| Power Supply | State | Result |
+| :-----: | :-----: | :-----: | 
+| 1 | powerLoss | FAIL | 
+| 2 | ok | PASS | 
+
+### Temperature
+
+ 
+
+| System temperature status| Result |
+| :-----: | :-----: | 
+| temperatureOk | PASS |
+
+### Cooling
+
+#### Power supplies 
+
+| Power Supply | Fans status | Result |
+| :-----: | :-----: | :-----: | 
+| PowerSupply1 | ok | PASS | 
+| PowerSupply2 | ok | PASS | 
+
+#### Fan trays
+
+| Fan tray | Fans status | Result |
+| :-----: | :-----: | :-----: | 
+| 1 | ok | PASS | 
+| 2 | ok | PASS | 
+| 3 | ok | PASS | 
+| 4 | ok | PASS | 
+
 
 ## Interfaces admin and operationnal status (switch2)
 
@@ -154,7 +222,7 @@ Report generated with Ansible (Fri  1 May 2020 22:40:12 CEST)
 | 10.10.10.5 | 6 | PASS
 ### Routing table
 
-| Route to EBGP peer loopback | via next hop | via interface | Result |
+| Destination (EBGP peer loopback) | via next hop | via interface | Result |
 | :-----: | :-----: | :-----: | :-----: | 
 | 172.16.0.1/32 | 10.10.10.0 | Ethernet2 | PASS | 
 | 172.16.0.3/32 | 10.10.10.5 | Ethernet24 | PASS |
@@ -200,7 +268,41 @@ Report generated with Ansible (Fri  1 May 2020 22:40:12 CEST)
 | :-----: | :-----: | :-----: | 
 | 4.22.4M-2GB | 4.22.4M-2GB | PASS |
 
-## Environment (switch3)
+## Environment (switch3)  
+
+### Power 
+
+| Power Supply | State | Result |
+| :-----: | :-----: | :-----: | 
+| 1 | powerLoss | FAIL | 
+| 2 | ok | PASS | 
+
+### Temperature
+
+ 
+
+| System temperature status| Result |
+| :-----: | :-----: | 
+| temperatureOk | PASS |
+
+### Cooling
+
+#### Power supplies 
+
+| Power Supply | Fans status | Result |
+| :-----: | :-----: | :-----: | 
+| PowerSupply1 | ok | PASS | 
+| PowerSupply2 | ok | PASS | 
+
+#### Fan trays
+
+| Fan tray | Fans status | Result |
+| :-----: | :-----: | :-----: | 
+| 1 | ok | PASS | 
+| 2 | ok | PASS | 
+| 3 | ok | PASS | 
+| 4 | ok | PASS | 
+
 
 ## Interfaces admin and operationnal status (switch3)
 
@@ -241,7 +343,7 @@ Report generated with Ansible (Fri  1 May 2020 22:40:12 CEST)
 | 10.10.10.4 | 6 | PASS
 ### Routing table
 
-| Route to EBGP peer loopback | via next hop | via interface | Result |
+| Destination (EBGP peer loopback) | via next hop | via interface | Result |
 | :-----: | :-----: | :-----: | :-----: | 
 | 172.16.0.1/32 | 10.10.10.2 | Ethernet2 | PASS | 
 | 172.16.0.2/32 | 10.10.10.4 | Ethernet24 | PASS |

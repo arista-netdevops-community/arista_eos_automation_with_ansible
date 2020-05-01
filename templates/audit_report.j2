@@ -33,7 +33,70 @@
 | :-----: | :-----: | :-----: | 
 | {{ version }} | {{ eos_version }} | {{ result | default('FAIL') }} |
 
-## Environment ({{ inventory_hostname }})
+## Environment ({{ inventory_hostname }})  
+
+### Power 
+
+| Power Supply | State | Result |
+| :-----: | :-----: | :-----: |
+{%- for key, value in registered_power.stdout_lines.0.powerSupplies.items() %}
+    {% set ps = key %}
+    {% set ps_state = value.state %}
+    {% if ps_state == 'ok' %}
+        {% set result = 'PASS' %} 
+    {% else %}
+        {% set result = 'FAIL' %} 
+    {% endif %}
+| {{ ps }} | {{ ps_state }} | {{ result | default('FAIL')}} |
+{%- endfor %} 
+
+### Temperature
+
+{% set temperature_status = registered_temperature.stdout_lines.0.systemStatus %}
+{% if (temperature_status == 'temperatureOk') %}
+    {% set result = 'PASS' %} 
+{% else %}
+    {% set result = 'FAIL' %} 
+{% endif %}
+
+| System temperature status| Result |
+| :-----: | :-----: | 
+| {{ temperature_status }} | {{ result | default('FAIL') }} |
+
+### Cooling
+
+#### Power supplies 
+
+| Power Supply | Fans status | Result |
+| :-----: | :-----: | :-----: |
+
+{%- for item in registered_fan.stdout_lines.0.powerSupplySlots %}
+    {% set ps_tmp_status = item.status %}
+    {% set ps = item.label %}
+    {% if ps_tmp_status == 'ok' %}
+        {% set result = 'PASS' %} 
+    {% else %}
+        {% set result = 'FAIL' %} 
+    {% endif %}
+| {{ ps }} | {{ ps_tmp_status }} | {{ result | default('FAIL')}} |
+{%- endfor %} 
+
+#### Fan trays
+
+| Fan tray | Fans status | Result |
+| :-----: | :-----: | :-----: |
+
+{%- for item in registered_fan.stdout_lines.0.fanTraySlots %}
+    {% set fan_tray_tmp_status = item.status %}
+    {% set fan_tray = item.label %}
+    {% if fan_tray_tmp_status == 'ok' %}
+        {% set result = 'PASS' %} 
+    {% else %}
+        {% set result = 'FAIL' %} 
+    {% endif %}
+| {{ fan_tray }} | {{ fan_tray_tmp_status }} | {{ result | default('FAIL')}} |
+{%- endfor %} 
+
 
 ## Interfaces admin and operationnal status ({{ inventory_hostname }})
 
@@ -129,7 +192,7 @@
 
 {# loopback address of each EBGP neighbor is defined in YAML #}
 {# Validate the routing table (including the "via nexthop" and the "via interface") for this address #}
-| Route to EBGP peer loopback | via next hop | via interface | Result |
+| Destination (EBGP peer loopback) | via next hop | via interface | Result |
 | :-----: | :-----: | :-----: | :-----: |  
 {%- for item in registered_routing.results %}
     {% set address = item.item.ebgp_peer_loopback + ('/32') %}

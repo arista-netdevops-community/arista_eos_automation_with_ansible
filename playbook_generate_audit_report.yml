@@ -34,6 +34,16 @@
         commands: "show environment power | json"
       register: registered_power
 
+    - name: collect fan status
+      eos_command:
+        commands: "show environment cooling | json"
+      register: registered_fan
+
+    - name: validate temperature 
+      eos_command:
+        commands: "show environment temperature | json"
+      register: registered_temperature
+
     - name: collect interfaces details
       eos_command:
         commands: "show interfaces {{item.interface}} description | json"
