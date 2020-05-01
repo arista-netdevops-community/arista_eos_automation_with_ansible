@@ -1,4 +1,4 @@
 # Report structure
 {% for item in groups.eos %}
-[Report for device {{ item }}.{{ domain_name }}](#report-for-device-{{ item| lower }}.{{ domain_name| lower |replace(".", "")}})  
+[Report for device {{ item }}.{{ domain_name }}](#report-for-device-{{ item| lower }}{{ domain_name| lower |replace(".", "")}})  
 {% endfor %}
