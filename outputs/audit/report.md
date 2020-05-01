@@ -1,4 +1,4 @@
-Report generated with Ansible (Fri  1 May 2020 22:25:29 CEST)
+Report generated with Ansible (Fri  1 May 2020 22:40:12 CEST)
 
 # Audit report structure
 [Report for device switch1.lab.local](#report-for-device-switch1lablocal)  
@@ -14,7 +14,7 @@ Report generated with Ansible (Fri  1 May 2020 22:25:29 CEST)
  
 
 | Expected model | Actual model | Result |
-| :-----: | :-----: | :-----: | :-----: | :-----: | 
+| :-----: | :-----: | :-----: | 
 | DCS-7150S-64-CL-F | DCS-7150S-64-CL-F | PASS |
 
 ### SW version 
@@ -101,7 +101,7 @@ Report generated with Ansible (Fri  1 May 2020 22:25:29 CEST)
  
 
 | Expected model | Actual model | Result |
-| :-----: | :-----: | :-----: | :-----: | :-----: | 
+| :-----: | :-----: | :-----: | 
 | DCS-7150S-64-CL-F | DCS-7150S-64-CL-F | PASS |
 
 ### SW version 
@@ -188,7 +188,7 @@ Report generated with Ansible (Fri  1 May 2020 22:25:29 CEST)
  
 
 | Expected model | Actual model | Result |
-| :-----: | :-----: | :-----: | :-----: | :-----: | 
+| :-----: | :-----: | :-----: | 
 | DCS-7150S-64-CL-F | DCS-7150S-64-CL-F | PASS |
 
 ### SW version 

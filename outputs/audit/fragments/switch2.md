@@ -7,7 +7,7 @@
  
 
 | Expected model | Actual model | Result |
-| :-----: | :-----: | :-----: | :-----: | :-----: | 
+| :-----: | :-----: | :-----: | 
 | DCS-7150S-64-CL-F | DCS-7150S-64-CL-F | PASS |
 
 ### SW version 
