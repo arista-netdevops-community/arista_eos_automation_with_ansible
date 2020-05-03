@@ -1,0 +1,2 @@
+- validate the EOS version is the expected one 
+- validate the HW model is the expected one

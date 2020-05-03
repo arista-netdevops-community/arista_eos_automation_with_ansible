@@ -1,0 +1,4 @@
+- validate power supplies status 
+- validate fan status (power supplies)
+- validate fan status (fan tray) 
+- validate temperature 

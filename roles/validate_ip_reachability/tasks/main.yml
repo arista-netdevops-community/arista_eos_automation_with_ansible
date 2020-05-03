@@ -1,0 +1,38 @@
+    - name: validate IP reachability with EBGP peers (directly connected)
+      eos_command:
+        commands: "ping {{ item.ebgp_peer_ip }} source {{ item.ip }} repeat 1 "
+        waitfor: result[0] contains '1 received' 
+      loop: "{{topology}}"
+      ignore_errors: "{{ validation.mode.loose }}"
+      when: (item.ebgp_peer_ip is defined) and (item.ip is defined)
+
+#    - name: run icmp ping on remote EOS devices (to EBGP peers)
+#      eos_command:
+#        commands: "ping {{ item.ebgp_peer_ip }} source {{ item.ip }} repeat 1 "
+#      register: registered_icmp_ebgp
+#      loop: "{{topology}}"
+
+#    - name: check packet lost (ping EBGP peers)
+#     assert:
+#        that:
+#          - "'1 received' in item.stdout.0"
+#        quiet: true
+#      loop: "{{ registered_icmp_ebgp.results }}"    
+#      ignore_errors: "{{ validation.mode.loose }}"
+       
+    - name: validate IP reachability from a local interface to EBGP peers loopback
+      eos_command:
+        commands: "ping {{ item.ebgp_peer_loopback }} source {{ item.ip }} repeat 1 "
+        waitfor: result[0] contains '1 received' 
+      loop: "{{topology}}"
+      ignore_errors: "{{ validation.mode.loose }}"
+      when: (item.ebgp_peer_loopback is defined) and (item.ip is defined)
+
+    - name: validate IP reachability from local loopback to EBGP peers loopback
+      eos_command:
+        commands: "ping {{ item.ebgp_peer_loopback }} source {{ loopback }} repeat 1 "
+        waitfor: result[0] contains '1 received' 
+      loop: "{{topology}}"
+      ignore_errors: "{{ validation.mode.loose }}"
+      when: (item.ebgp_peer_loopback is defined)
+

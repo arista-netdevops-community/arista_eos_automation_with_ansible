@@ -1,0 +1,12 @@
+---
+    - name: validate the routing table (both the via nexthop and the via interface) for the loopback address of each EBGP neighbor
+      eos_command:
+        commands: "show ip route {{ item.ebgp_peer_loopback + ('/32') }} | json"
+        waitfor:
+          - result[0][vrfs][default][routes][{{ item.ebgp_peer_loopback + ('/32') }}][vias][0][nexthopAddr] eq {{item.ebgp_peer_ip}}
+          - result[0]['vrfs']['default']['routes']['{{ item.ebgp_peer_loopback + ("/32") }}']['vias'][0]['interface'] eq {{item.interface}}
+        retries: 2
+        interval: 2
+      loop: "{{topology}}"
+      when: (item.ebgp_peer_loopback is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      ignore_errors: "{{ validation.mode.loose }}"

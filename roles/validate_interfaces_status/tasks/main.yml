@@ -1,0 +1,22 @@
+---
+    - name: validate interfaces admin state (interfaces between devices)
+      eos_command:
+        commands: "show interfaces {{item.interface}} description | json"
+        waitfor:
+          - result[0].interfaceDescriptions.{{item.interface}}.interfaceStatus eq 'up'
+        retries: 2
+        interval: 2
+      loop: "{{topology}}"
+      when: (item.interface is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      ignore_errors: "{{ validation.mode.loose }}"
+      
+    - name: validate interfaces operational state (interfaces between devices)
+      eos_command:
+        commands: "show interfaces {{item.interface}} description | json"
+        waitfor:
+          - result[0].interfaceDescriptions.{{item.interface}}.lineProtocolStatus eq 'up'
+        retries: 2
+        interval: 2
+      loop: "{{topology}}"
+      when: (item.interface is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      ignore_errors: "{{ validation.mode.loose }}"

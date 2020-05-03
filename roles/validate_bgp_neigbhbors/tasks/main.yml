@@ -1,0 +1,34 @@
+---
+    - name: validate EBGP sessions state
+      eos_command:
+        commands: "show ip bgp neighbors {{item.ebgp_peer_ip}} | json"
+        waitfor:
+          - "result[0].vrfs.default.peerList[0].state eq 'Established'"
+        retries: 2
+        interval: 2
+      loop: "{{topology}}"
+      when: (item.ebgp_peer_ip is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      ignore_errors: "{{ validation.mode.loose }}"
+
+    - name: validate some ipv4 prefixes are sent to each EBGP neighbor 
+      eos_command:
+        commands: "show ip bgp neighbors {{item.ebgp_peer_ip}} | json"
+        waitfor:
+          - "result[0].vrfs.default.peerList[0].prefixesSent gt '1'"
+        retries: 2
+        interval: 2
+      loop: "{{topology}}"
+      when: (item.ebgp_peer_ip is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      ignore_errors: "{{ validation.mode.loose }}"
+
+    - name: validate some ipv4 prefixes are received from each EBGP neighbor 
+      eos_command:
+        commands: "show ip bgp neighbors {{item.ebgp_peer_ip}} | json"
+        waitfor:
+          - "result[0].vrfs.default.peerList[0].prefixesReceived gt '1'"
+        retries: 2
+        interval: 2
+      loop: "{{topology}}"
+      when: (item.ebgp_peer_ip is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      ignore_errors: "{{ validation.mode.loose }}"
+

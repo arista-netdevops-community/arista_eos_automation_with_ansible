@@ -92,7 +92,7 @@
 | :-----: | :-----: | :-----: | 
 | 10.10.10.2 | 6 | PASS 
 | 10.10.10.4 | 6 | PASS
-### Routing table
+## Routing table (switch3)
 
 | Destination (EBGP peer loopback) | via next hop | via interface | Result |
 | :-----: | :-----: | :-----: | :-----: | 

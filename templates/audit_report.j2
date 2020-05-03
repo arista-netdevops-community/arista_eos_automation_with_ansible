@@ -188,7 +188,7 @@
 | {{ peer }} | {{ prefixes_received }} | {{ result | default('FAIL')}}
 {%- endfor %}
 
-### Routing table
+## Routing table ({{ inventory_hostname }})
 
 {# loopback address of each EBGP neighbor is defined in YAML #}
 {# Validate the routing table (including the "via nexthop" and the "via interface") for this address #}

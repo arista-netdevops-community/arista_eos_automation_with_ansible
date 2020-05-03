@@ -1,0 +1,12 @@
+---
+    - name: validate LLDP topology
+      eos_command:
+        commands: "show lldp neighbors {{item.interface}} | json"
+        waitfor:
+          - "result[0].lldpNeighbors[0].neighborDevice eq {{item.lldp_neighbor}}.{{domain_name}}"
+          - "result[0].lldpNeighbors[0].neighborPort eq {{item.lldp_neighbor_interface}}"
+        retries: 2
+        interval: 2
+      loop: "{{topology}}"
+      when: (item.interface is defined) and (item.lldp_neighbor is defined) and ((ansible_version['major'] == 2 and ansible_version['minor']|int >= 9))
+      ignore_errors: "{{ validation.mode.loose }}"

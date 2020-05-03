@@ -1,0 +1,2 @@
+- validate interfaces admin state (interfaces between devices)
+- validate interfaces operational state (interfaces between devices)

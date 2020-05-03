@@ -1,0 +1,1 @@
+validate LLDP topology: collects LLDP informartions for each interface, and compares the expected neighbor and the expected neigbor interface with the actual neighbor and the actual neighbor interface.  

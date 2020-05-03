@@ -1,0 +1,7 @@
+---
+    - name: validate EOS version and HW model
+      eos_command:
+        commands: "show version | json"
+        waitfor:
+          - result[0].modelName eq '{{ model }}'
+          - result[0].version eq '{{ version }}'

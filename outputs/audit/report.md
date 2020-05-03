@@ -1,4 +1,4 @@
-Report generated with Ansible (Sat  2 May 2020 01:31:59 CEST)
+Report generated with Ansible (Sun  3 May 2020 23:08:25 CEST)
 
 # Audit report structure
 [Report for device switch1.lab.local](#report-for-device-switch1lablocal)  
@@ -99,7 +99,7 @@ Report generated with Ansible (Sat  2 May 2020 01:31:59 CEST)
 | :-----: | :-----: | :-----: | 
 | 10.10.10.1 | 5 | PASS 
 | 10.10.10.3 | 5 | PASS
-### Routing table
+## Routing table (switch1)
 
 | Destination (EBGP peer loopback) | via next hop | via interface | Result |
 | :-----: | :-----: | :-----: | :-----: | 
@@ -220,7 +220,7 @@ Report generated with Ansible (Sat  2 May 2020 01:31:59 CEST)
 | :-----: | :-----: | :-----: | 
 | 10.10.10.0 | 5 | PASS 
 | 10.10.10.5 | 6 | PASS
-### Routing table
+## Routing table (switch2)
 
 | Destination (EBGP peer loopback) | via next hop | via interface | Result |
 | :-----: | :-----: | :-----: | :-----: | 
@@ -341,7 +341,7 @@ Report generated with Ansible (Sat  2 May 2020 01:31:59 CEST)
 | :-----: | :-----: | :-----: | 
 | 10.10.10.2 | 6 | PASS 
 | 10.10.10.4 | 6 | PASS
-### Routing table
+## Routing table (switch3)
 
 | Destination (EBGP peer loopback) | via next hop | via interface | Result |
 | :-----: | :-----: | :-----: | :-----: | 
