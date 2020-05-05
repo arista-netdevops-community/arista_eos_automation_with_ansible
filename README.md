@@ -8,15 +8,23 @@ The playbooks are at the root of this repository. The playbooks name is playbook
 
 - [playbook_parse_command.yml](playbook_parse_command.yml) shows how to collect a `show command` and parses it
 - [playbook_enable_http_api.yml](playbook_enable_http_api.yml) uses SSH to enable eAPI 
-- [playbook_configure.yml](playbook_configure.yml) generates the EOS configuration files [conf_generated](outputs/conf_generated) from the template [config.j2](templates/config.j2) and loads the configuration generated on the EOS devices. It is used to configure the [lab](#network-topology) 
-- [playbook_collect_commands.yml](playbook_collect_commands.yml) collects the EOS `show commands` defined in the file [audit.yml](group_vars/eos/audit.yml) and save the output in the directory [cli](outputs/cli)
-- [playbook_generate_audit_report.yml](playbook_generate_audit_report.yml) audits the devices and generates this [report](outputs/audit/report.md). It is used to audit the [lab](#network-topology) 
-- [playbook_validate_states.yml](playbook_validate_states.yml) validates the devices states. It is used to validate the [lab](#network-topology) 
+- [playbook_configure.yml](playbook_configure.yml) generates the EOS configuration files [conf_generated](outputs/conf_generated) from the template [config.j2](templates/config.j2) and loads the configuration generated on the EOS devices. It is used to configure the [lab](#network-topology) (interfaces and BGP configuration).   
+- [playbook_collect_commands.yml](playbook_collect_commands.yml) collects the EOS `show commands` defined in the file [audit.yml](group_vars/eos/audit.yml) and save the output in the directory [cli](outputs/cli). The output can be used for a humans review. To collect others EOS `show commands`, simply update the file [audit.yml](group_vars/eos/audit.yml).  
+- [playbook_generate_audit_report.yml](playbook_generate_audit_report.yml) audits the devices and generates this [report](outputs/audit/report.md). It is used to audit the [lab](#network-topology).  
+The audit covers: 
+  - HW model
+  - SW release
+  - environment (cooling, temperature, power) 
+  - interfaces status
+  - LLDP topology 
+  - BGP sessions 
+  - IP reachability tests
+- [playbook_validate_states.yml](playbook_validate_states.yml) validates the devices states. It is used to validate the [lab](#network-topology). It tests the same topics as [playbook_generate_audit_report.yml](playbook_generate_audit_report.yml). ([playbook_generate_audit_report.yml](playbook_generate_audit_report.yml) is better for humans review because the output is more humans readable and [playbook_validate_states.yml](playbook_validate_states.yml) is better for CI because it fails if a test fails).  
 - [playbook_backup_configuration.yml](playbook_backup_configuration.yml) backups the running configuration in the directory [backup](outputs/backup) 
 - [playbook_collect_facts_config.yml](playbook_collect_facts_config.yml) 
 backups the running configuration in the directory [running_config](outputs/facts/running_config) 
-- [playbook_collect_facts_hardware.yml](playbook_collect_facts_hardware.yml) collects the hardware facts and saves them in the directory [hardware](outputs/facts/hardware) 
-- [playbook_collect_facts_resources.yml](playbook_collect_facts_resources.yml) collects some resources facts and saves them in the directory [resources](outputs/facts/resources)  
+- [playbook_collect_facts_hardware.yml](playbook_collect_facts_hardware.yml) returns the hardware facts (structured data about the device) and saves them in the directory [hardware](outputs/facts/hardware) 
+- [playbook_collect_facts_resources.yml](playbook_collect_facts_resources.yml) returns some resources facts (structured data about the device) and saves them in the directory [resources](outputs/facts/resources)  
 - [playbook_manage_vlans.yml](playbook_manage_vlans.yml) manages VLANs and L2 interfaces in a declarative way. 
 - [playbook_configure_lines.yml](playbook_configure_lines.yml) shows how you can configure a device with a set of commands.  
 
