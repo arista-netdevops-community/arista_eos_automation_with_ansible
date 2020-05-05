@@ -1,0 +1,47 @@
+---
+
+- name: Make sure the facts directory exists
+  hosts: localhost
+  gather_facts: false
+  
+  tasks: 
+
+    - name: Make sure the facts directory exists
+      file:
+        path: "{{save_dir}}/facts/resources"
+        state: directory
+
+- name: collect facts from EOS devices and display some details
+  hosts: eos
+  connection: network_cli
+  gather_facts: false
+  
+  tasks:
+
+    - name: Make sure a directory exists for each device
+      file:
+        path: "{{save_dir}}/facts/resources/{{inventory_hostname}}"
+        state: directory
+
+    - name: collect facts from EOS devices
+      eos_facts:
+        gather_network_resources: 
+          - interfaces
+          - l2_interfaces
+          - vlans
+      register: resources
+
+    - name: copy interfaces resources in the device directory
+      copy:
+        content: "{{resources.ansible_facts.ansible_network_resources.interfaces}}"
+        dest: "{{save_dir}}/facts/resources/{{inventory_hostname}}/interfaces.json"
+
+    - name: copy vlans resources in the device directory
+      copy:
+        content: "{{resources.ansible_facts.ansible_network_resources.vlans}}"
+        dest: "{{save_dir}}/facts/resources/{{inventory_hostname}}/vlans.json"
+
+    - name: copy L2 interfaces resources in the device directory
+      copy:
+        content: "{{resources.ansible_facts.ansible_network_resources.l2_interfaces}}"
+        dest: "{{save_dir}}/facts/resources/{{inventory_hostname}}/L2_interfaces.json"
