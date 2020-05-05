@@ -23,8 +23,9 @@ The audit covers HW model, SW release, environment (cooling, temperature, power)
 
 The [playbook_validate_states.yml](playbook_validate_states.yml) validates the devices states.  
 It is used to validate the [lab](#network-topology).  
-It tests the same topics as [playbook_generate_audit_report.yml](playbook_generate_audit_report.yml).  
-The [playbook_generate_audit_report.yml](playbook_generate_audit_report.yml) is better for humans review because the output is more humans readable and the [playbook_validate_states.yml](playbook_validate_states.yml) is better for CI because it fails if a test fails.  
+It tests the same topics as the [playbook_generate_audit_report.yml](playbook_generate_audit_report.yml):  
+- The [playbook_generate_audit_report.yml](playbook_generate_audit_report.yml) is better for humans review because the output is more humans readable 
+- The [playbook_validate_states.yml](playbook_validate_states.yml) is better for CI because it fails if a test fails.  
 
 The [playbook_backup_configuration.yml](playbook_backup_configuration.yml) backups the running configuration in the directory [backup](outputs/backup) 
 
