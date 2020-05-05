@@ -4,6 +4,8 @@ This repository has Ansible playbooks examples to automate Arista EOS.
 
 # Playbooks description
 
+The playbooks are at the root of this repository. The playbooks name is playbook_*.yaml.
+
 - [playbook_parse_command.yml](playbook_parse_command.yml) shows how to collect a `show command` and parses it
 - [playbook_enable_http_api.yml](playbook_enable_http_api.yml) uses SSH to enable eAPI 
 - [playbook_configure.yml](playbook_configure.yml) generates the EOS configuration files [conf_generated](outputs/conf_generated) from the template [config.j2](templates/config.j2) and loads the configuration generated on the EOS devices. It is used to configure the [lab](#network-topology) 
