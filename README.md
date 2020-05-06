@@ -1,4 +1,4 @@
-![GitHub](https://img.shields.io/github/license/ksator/arista_eos_automation_with_ansible). 
+![GitHub](https://img.shields.io/github/license/ksator/arista_eos_automation_with_ansible)   
 
 # About this repository 
 
