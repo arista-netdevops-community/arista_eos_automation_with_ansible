@@ -31,7 +31,7 @@ The audit covers HW model, SW release, environment (cooling, temperature, power)
 
 - The [playbook_validate_states.yml](playbook_validate_states.yml) validates the devices states.  
 It is used to validate the [lab](#network-topology).  
-It tests the same topics as the [playbook_generate_audit_report.yml](playbook_generate_audit_report.yml): The [playbook_generate_audit_report.yml](playbook_generate_audit_report.yml) is better for humans review because the output is more humans readable, the [playbook_validate_states.yml](playbook_validate_states.yml) is better for CI because it will fail (so the CI will fail) if a test fails.  
+It tests the same topics as the [playbook_generate_audit_report.yml](playbook_generate_audit_report.yml): the [playbook_generate_audit_report.yml](playbook_generate_audit_report.yml) is better for humans review because the output is more humans readable, the [playbook_validate_states.yml](playbook_validate_states.yml) is better for CI because it will fail (so the CI will fail) if a test fails.  
 
 - The [playbook_backup_configuration.yml](playbook_backup_configuration.yml) backups the running configuration in the directory [backup](outputs/backup). 
 
@@ -47,7 +47,7 @@ It tests the same topics as the [playbook_generate_audit_report.yml](playbook_ge
 
 # Repository structure 
 
-- The playbooks are at the root of this repository. The playbooks name is playbook_*.yaml.  
+- The playbooks are at the root of this repository. The playbooks name is `playbook_*.yml`.  
 - The inventory file is [inventory.ini](inventory.ini)
 - The variables are defined in the [host_vars](host_vars) and [group_vars](group_vars) directories 
 - The directory [templates](templates) has the jinja templates used by the playbooks 
