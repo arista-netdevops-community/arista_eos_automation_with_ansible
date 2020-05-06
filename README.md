@@ -1,3 +1,5 @@
+![GitHub](https://img.shields.io/github/license/ksator/arista_eos_automation_with_ansible). 
+
 # About this repository 
 
 This repository has Ansible playbooks examples to automate Arista EOS. 
