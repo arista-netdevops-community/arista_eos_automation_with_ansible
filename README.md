@@ -14,6 +14,8 @@ This repository has Ansible playbooks examples to automate Arista EOS.
 
 The playbooks are at the root of this repository. The playbooks name is `playbook_*.yml`.
 
+These playbooks update devices configuration:  
+
 - [playbook_enable_http_api.yml](playbook_enable_http_api.yml) uses SSH to enable eAPI.  
 
 - [playbook_configure_using_files.yml](playbook_configure_using_files.yml) generates the EOS configuration files [conf_generated](outputs/conf_generated) from the template [config.j2](templates/config.j2) and loads the configuration generated on the EOS devices.  
@@ -24,6 +26,8 @@ It is used to configure this [lab](#network-topology) (interfaces and BGP config
 - [playbook_configure_using_lines.yml](playbook_configure_using_lines.yml) shows how you can configure a device with a set of commands. 
   
 - [playbook_configure_login_banner.yml](playbook_configure_login_banner.yml) configures a multi lines login banner.  
+
+These playbooks collect data from devices:  
 
 - [playbook_print_version_and_model.yml](playbook_print_version_and_model.yml) executes a `show version` command and parses the command output and print the EOS version and device model.  
 
@@ -39,11 +43,13 @@ To collect others EOS `show commands`, simply update the file [audit.yml](group_
 
 - [playbook_collect_facts_resources.yml](playbook_collect_facts_resources.yml) returns some resources facts (structured data about the device: vlans, interfaces, ...) and saves them in the directory [resources](outputs/facts/resources).  
 
+These playbooks validate the devices states:  
+
 - [playbook_validate_states.yml](playbook_validate_states.yml) validates the devices states.  
 It is used to validate this [lab](#network-topology).  
 The validation covers HW model, SW release, environment (cooling, temperature, power), interfaces status, LLDP topology, BGP sessions, IP reachability tests.  
 It compares the actual states with the desired states, and reports mismatches.  
-  - The desired states are described in variables ([host_vars](host_vars) and [group_vars](group_vars) directories).  
+  - The desired states are described in variables ([host_vars](host_vars) and [group_vars](group_vars) directories). So we reuse the same variables we already used to generate the configuration files.  
   - The actual states are the states on the devices. To get the actual states, it runs `show commands` with a json output, and parses the output.  
   - This playbook is interresting for CI because if a test fails, the pipeline will fail (either all the tests pass, or, the pipeline fails).  
 
@@ -51,7 +57,7 @@ It compares the actual states with the desired states, and reports mismatches.
 It is used to audit this [lab](#network-topology).  
 The audit covers HW model, SW release, environment (cooling, temperature, power), interfaces status, LLDP topology, BGP sessions, IP reachability tests.  
 It compares the actual states with the desired states and generates a report: 
-  - The desired states are described in variables ([host_vars](host_vars) and [group_vars](group_vars) directories).  
+  - The desired states are described in variables ([host_vars](host_vars) and [group_vars](group_vars) directories). So we reuse the same variables we already used to generate the configuration files.  
   - The actual states are the states on the devices.  
   - It runs `show commands` with a json representation and registers the outputs in variables. It doesnt process the data collected.  
   - Then it renders a template to generate the report. The data processing (data parsing and data comparaison) is done by the template (not by the playbook).  
