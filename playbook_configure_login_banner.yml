@@ -1,0 +1,13 @@
+---
+- name: configure the login banner
+  hosts: eos
+  gather_facts: false
+  connection: httpapi
+  
+  tasks: 
+    - name: configure the login banner
+      eos_banner:
+        banner: login
+        text: "{{login_banner}}"
+        state: present
+

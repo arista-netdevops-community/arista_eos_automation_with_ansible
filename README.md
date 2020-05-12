@@ -14,36 +14,49 @@ This repository has Ansible playbooks examples to automate Arista EOS.
 
 The playbooks are at the root of this repository. The playbooks name is `playbook_*.yml`.
 
-- The [playbook_parse_command.yml](playbook_parse_command.yml) shows how to execute a `show command` and parses the `show command` output.
+- [playbook_enable_http_api.yml](playbook_enable_http_api.yml) uses SSH to enable eAPI.  
 
-- The [playbook_enable_http_api.yml](playbook_enable_http_api.yml) uses SSH to enable eAPI.  
+- [playbook_configure_using_files.yml](playbook_configure_using_files.yml) generates the EOS configuration files [conf_generated](outputs/conf_generated) from the template [config.j2](templates/config.j2) and loads the configuration generated on the EOS devices.  
+It is used to configure this [lab](#network-topology) (interfaces and BGP configuration). 
 
-- The [playbook_configure.yml](playbook_configure.yml) generates the EOS configuration files [conf_generated](outputs/conf_generated) from the template [config.j2](templates/config.j2) and loads the configuration generated on the EOS devices.  
-It is used to configure the [lab](#network-topology) (interfaces and BGP configuration). 
+- [playbook_manage_vlans.yml](playbook_manage_vlans.yml) manages VLANs and L2 interfaces in a declarative way. 
 
-- The [playbook_collect_commands.yml](playbook_collect_commands.yml) collects the EOS `show commands` defined in the file [audit.yml](group_vars/eos/audit.yml) and save the output in the directory [cli](outputs/cli).  
+- [playbook_configure_using_lines.yml](playbook_configure_using_lines.yml) shows how you can configure a device with a set of commands. 
+  
+- [playbook_configure_login_banner.yml](playbook_configure_login_banner.yml) configures a multi lines login banner.  
+
+- [playbook_print_version_and_model.yml](playbook_print_version_and_model.yml) executes a `show version` command and parses the command output and print the EOS version and device model.  
+
+- [playbook_collect_commands.yml](playbook_collect_commands.yml) collects the EOS `show commands` defined in the file [audit.yml](group_vars/eos/audit.yml) and save the output in the directory [cli](outputs/cli).  
 The output can be used for a humans review.  
 To collect others EOS `show commands`, simply update the file [audit.yml](group_vars/eos/audit.yml).  
 
-- The [playbook_generate_audit_report.yml](playbook_generate_audit_report.yml) audits the devices and generates this [report](outputs/audit/report.md).  
-It is used to audit the [lab](#network-topology).  
+- [playbook_backup_configuration.yml](playbook_backup_configuration.yml) backups the running configuration in the directory [backup](outputs/backup). 
+
+- [playbook_collect_facts_config.yml](playbook_collect_facts_config.yml) backups the running configuration in the directory [running_config](outputs/facts/running_config). 
+
+- [playbook_collect_facts_hardware.yml](playbook_collect_facts_hardware.yml) returns the hardware facts (structured data about the device: SN, model, software version ...) and saves them in the directory [hardware](outputs/facts/hardware). 
+
+- [playbook_collect_facts_resources.yml](playbook_collect_facts_resources.yml) returns some resources facts (structured data about the device: vlans, interfaces, ...) and saves them in the directory [resources](outputs/facts/resources).  
+
+- [playbook_validate_states.yml](playbook_validate_states.yml) validates the devices states.  
+It is used to validate this [lab](#network-topology).  
+The validation covers HW model, SW release, environment (cooling, temperature, power), interfaces status, LLDP topology, BGP sessions, IP reachability tests.  
+It compares the actual states with the desired states.  
+The desired states are described in variables ([host_vars](host_vars) and [group_vars](group_vars) directories).  
+The actual states are the states on the devices. To get the actual states, it runs `show commands` with a json output, and parses the output.  
+Then it compares the actual states with the desired state, and reports mismatches.   
+This playbook is interresting for CI because if a test fails, the pipeline will fail (either all the tests pass, or, the pipeline fails).  
+
+- [playbook_generate_audit_report.yml](playbook_generate_audit_report.yml) audits the devices and generates this humans readable [report](outputs/audit/report.md).  
+It is used to audit this [lab](#network-topology).  
 The audit covers HW model, SW release, environment (cooling, temperature, power), interfaces status, LLDP topology, BGP sessions, IP reachability tests.  
-
-- The [playbook_validate_states.yml](playbook_validate_states.yml) validates the devices states.  
-It is used to validate the [lab](#network-topology).  
-It tests the same topics as the [playbook_generate_audit_report.yml](playbook_generate_audit_report.yml): the [playbook_generate_audit_report.yml](playbook_generate_audit_report.yml) is better for humans review because the output is more humans readable, the [playbook_validate_states.yml](playbook_validate_states.yml) is better for CI because it will fail (so the CI will fail) if a test fails.  
-
-- The [playbook_backup_configuration.yml](playbook_backup_configuration.yml) backups the running configuration in the directory [backup](outputs/backup). 
-
-- The [playbook_collect_facts_config.yml](playbook_collect_facts_config.yml) backups the running configuration in the directory [running_config](outputs/facts/running_config). 
-
-- The [playbook_collect_facts_hardware.yml](playbook_collect_facts_hardware.yml) returns the hardware facts (structured data about the device: SN, model, software version ...) and saves them in the directory [hardware](outputs/facts/hardware). 
-
-- The [playbook_collect_facts_resources.yml](playbook_collect_facts_resources.yml) returns some resources facts (structured data about the device: vlans, interfaces, ...) and saves them in the directory [resources](outputs/facts/resources).  
-
-- The [playbook_manage_vlans.yml](playbook_manage_vlans.yml) manages VLANs and L2 interfaces in a declarative way. 
-
-- The [playbook_configure_lines.yml](playbook_configure_lines.yml) shows how you can configure a device with a set of commands. 
+It compares the actual states with the desired states and generates a report.  
+The desired states are described in variables ([host_vars](host_vars) and [group_vars](group_vars) directories).  
+The actual states are the states on the devices.  
+It runs `show commands` with a json representation and registers the outputs in variables. It doesnt process the data collected.  
+Then it renders a template to generate the report. The data processing (data parsing and data comparaison) is done by the template (not by the playbook).  
+This playbook doesnt fails if a test fail (because this playbook doesn’t run the tests itself, the tests are run by the template). So as example if a bgp session is not established the playbook will not fail but the report generated by the template will highlight this issue. 
 
 # Repository structure 
 

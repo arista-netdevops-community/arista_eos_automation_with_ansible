@@ -9,4 +9,9 @@ vlans:
   - vlan_id: 30
     name: yellow
   - vlan_id: 40
-    
+
+login_banner: |
+   WARNING: This is a multi lines login banner
+            This is the one line of banner text. 
+            This is the another line of banner text. 
+
